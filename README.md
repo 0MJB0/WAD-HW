@@ -1,33 +1,44 @@
-# PostIt – WAD Homework 2
+# PostIt – WAD Homework 3
 
-The PostIt site from Homework 1, made dynamic with JavaScript. The posts are no longer hard coded in `index.html`; they are fetched as JSON and turned into HTML with the DOM API.
+The PostIt app rebuilt with **Vue 3 + Vuex + Vue Router** (Vite).
+
+## Running
+
+```bash
+npm install
+npm run dev      # development server, open the printed URL
+npm run build    # production build into dist/
+```
 
 ## Tasks
 
 | Task | Where |
 | ---- | ----- |
-| 1. JSON file with 10 posts | `data/posts.json` (id, author, `createTime` as ISO 8601, body, image, likes) |
-| 2. JSON validation | Validated with [JSONLint](https://jsonlint.com/) |
-| 3. Online endpoint | The same JSON hosted on [npoint.io](https://www.npoint.io/) |
-| 4. Fetch from the endpoint | `js/main.js` (the online `fetch` is kept, commented out) |
-| 5. Fetch from the local file | `js/main.js` fetches `data/posts.json` |
-| 6. Photos | JSON only stores text, so each post stores the **path** of its image (`"image": "images/lake.svg"`); posts without a photo use `null` |
-| 7. Profile dropdown | Clicking the profile photo opens / closes a menu with name, email and logout |
-| 8. Styling | `css/style.css` |
-| 10. GitHub Pages | Deployed from the `main` branch root |
+| 1. Two pages (main + signup) | Views `src/views/HomeView.vue` and `src/views/SignupView.vue`, routes in `src/router/index.js` |
+| 2. Header with navigation | `src/components/HeaderComponent.vue` (`router-link` to Home and Signup), used in `App.vue` on both pages |
+| 3. Footer | `src/components/FooterComponent.vue` (copyright, course, contact), used in `App.vue` on both pages |
+| 4.1 Post component using Vuex | `src/components/PostComponent.vue` gets only the post `id` and reads the post from the store getter `postById`; the posts are fetched from `public/data/posts.json` by the store action `fetchPosts` (`src/store/index.js`) |
+| 4.2 Like button + number of likes | Like button dispatches `likePost` → mutation `incrementLikes` |
+| 4.3 Reset likes button | Button in `HomeView.vue` dispatches `resetLikes` → mutation `resetLikes` sets every post's likes to 0 |
+| 5. Signup form | Email, Password and Signup button in `SignupView.vue` |
+| 6. Password validation | `PASSWORD_RULES` in `SignupView.vue`; every failed rule is shown as "The password is not valid - …" |
+| 7. Styling | `src/assets/style.css` (global) + scoped styles in every component |
 
-## Running locally
-
-`fetch` does not work when `index.html` is opened directly as a file (`file://`). Open the project through a local server, for example the **Live Server** extension in VS Code.
+Pages are implemented as **views** (components rendered by the router in `<router-view>`), while the header, footer and post are reusable **components**.
 
 ## Structure
 
 ```
 index.html
-addPost.html
-login.html
-css/style.css
-js/main.js
-data/posts.json
-images/
+public/
+  data/posts.json      10 posts
+  images/
+src/
+  main.js              creates the app, uses router + store
+  App.vue              Header + <router-view> + Footer
+  router/index.js
+  store/index.js       Vuex store (state, getters, mutations, actions)
+  components/          HeaderComponent, FooterComponent, PostComponent
+  views/               HomeView, SignupView
+  assets/style.css
 ```
